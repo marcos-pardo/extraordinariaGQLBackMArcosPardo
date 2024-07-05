@@ -1,5 +1,5 @@
 import { GraphQLError, Location} from "graphql";
-import {Character, Episode, Location } from "../types.ts"
+import {Character, Episode, } from "../types.ts"
 
 
 const Character ={
@@ -24,7 +24,6 @@ const Character ={
             const episodes:Episode[] = await Promise.all(episodesPromises);
             return episodes; },
 
-        
         };
 
             export default Character;
