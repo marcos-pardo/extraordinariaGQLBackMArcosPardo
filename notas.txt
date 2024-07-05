@@ -1,0 +1,172 @@
+type Location {
+id:String
+name:String
+type: String
+dimension: String
+residents: [Character!]!
+created: String
+}
+
+
+
+export type Character = {
+
+    id:string;
+    name:string;
+    status:string;
+    species:string;
+    type:string;
+    gender:string;
+    origin: Location;
+    location: Location
+    image: string;
+    episode: Episode[];
+    created:string;
+}
+
+export type Location ={
+    id:string;
+    name:string;
+    type: string;
+    dimension: string;
+    residents: Character[];
+    created: string;
+}
+
+export type Episode ={
+    id: string;
+name: string;
+air_date: string;
+episode: string;
+characters: Character[];
+created: string;
+}
+
+
+
+
+export const typeDefs = `#graphql
+
+type Character {
+id:ID!
+name:String
+status:String
+species:String
+type:String
+gender:String
+origin: Location
+location: Location
+image: String
+episode: [Episode!]!
+created:String
+}
+
+type Location {
+id:String
+name:String
+type: String
+dimension: String
+residents: [Character!]!
+created: String
+}
+
+type Episode {
+id: String
+name: String
+air_date: String
+episode: String
+characters: [Character!]!
+created: String
+}
+
+type Query{
+    character(id: ID!): Character 
+    charactersByIds(ids: [ID!]!): [Character] 
+}
+
+
+
+`
+
+
+
+
+            location: async(parent:Character):Promise<Location> =>{
+                const locationPromise: Promise<Location>[] = parent.episode.map(async element =>{
+                    const response = await fetch (element);
+                    if(!response){
+                        throw new GraphQLError(`No episode found with id ${element}`)
+                    }
+                    const data = await response.json();
+                    const local:Location={
+
+                        id: data.id,
+                        name: data.name,
+                        type: data.type,
+                        dimension: data.dimension,
+                        residents: data.residents,
+                        created: data.created,
+                    }
+        
+                    return local;
+                    })
+                    const localizaciones:Location[] = await Promise.all(locationPromise);
+                    return localizaciones; },
+        
+        };
+
+                    location: async(parent:Character):Promise<Location> =>{
+                const locationPromise: Promise<Location>[] = parent.episode.map(async element =>{
+                    const response = await fetch (element);
+                    if(!response){
+                        throw new GraphQLError(`No episode found with id ${element}`)
+                    }
+                    const data = await response.json();
+                    const local:Location={
+                        id: data.id,
+                        name: data.name,
+                        type: data.type,
+                        dimension: data.dimension,
+                        residents: data.residents,
+                        created: data.created,
+                    }
+        
+                    return local;
+                    })
+                    const localizaciones = await Promise.all(locationPromise);
+                    return localizaciones; },
+
+
+
+
+                    import { GraphQLError} from "graphql";
+import {Character, Episode ,Location} from "../types.ts"
+import { parseConstValue } from "graphql";
+
+const Location ={
+    residents: async(parent:Location):Promise<Character[]> =>{
+        const loc: Promise<Character>[] = parent.residents.map(async element =>{
+            const response = await fetch ( element);
+            if(!response){
+                throw new GraphQLError(`No episode found with id ${element}`)
+            }
+            const data = await response.json();
+            const location={
+                id:data.id,
+                name:data.name,
+                status:data.status,
+                species:data.species,
+                type:data.type,
+                gender:data.gender,
+                location: data.location,
+                image: data.image,
+                episode: data.episode,
+                created:data.created,
+            }
+
+            return location;
+            })
+            const locations = await Promise.all(loc);
+            return locations; }};
+
+            export default Location;
