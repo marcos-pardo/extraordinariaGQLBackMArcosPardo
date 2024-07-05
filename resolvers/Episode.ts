@@ -17,7 +17,6 @@ const Episode ={
                 species:data.species,
                 type:data.type,
                 gender:data.gender,
-                location: data.location,
                 image: data.image,
                 episode: data.episode,
                 created:data.created,
@@ -25,7 +24,7 @@ const Episode ={
 
             return episode;
             })
-            const characters = await Promise.all(ch);
+            const characters:Character[] = await Promise.all(ch);
             return characters; }};
 
             export default Episode;
